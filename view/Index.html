@@ -2,136 +2,202 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
-  <link rel="stylesheet" href="index.css">
-  <!-- Latest compiled and minified CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Latest compiled JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Product</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="index.css">
+  <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
 </head>
 <body>
-<section>
-  <!--for demo wrap-->
-  <h1>Province Management</h1>
 
-  <button class="btn btn-primary" onclick="getAllProvince()">
-    Province List
-  </button>
-  <button style="margin-left: 2px " type="button" class="btn btn-primary" onclick="displayCreateForm()">
-    Create new Province
-  </button>
-  <br>
-  <div class="tbl-header">
-    <table cellpadding="0" cellspacing="0" border="0">
-      <thead>
-      <tr>
-        <th>Stt</th>
-        <th>Name</th>
-        <th>Popular</th>
-        <th>Area</th>
-        <th>GDP</th>
-        <th>Description</th>
-        <th>Country</th>
-        <th>Action</th>
-      </tr>
-      </thead>
-    </table>
-  </div>
-  <div id="list-customers" class="tbl-content">
+<!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+<!--  <div class="container-fluid">-->
+<!--    <a class="navbar-brand" href="#" >List Province</a>-->
+<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--      <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
+<!--    <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
+<!--      <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link active" onclick="getAllProvince()">Home</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link" onclick="showCreate()">Create Province</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item dropdown">-->
+<!--          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            Dropdown-->
+<!--          </a>-->
+<!--          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--            <li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--            <li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--            <li><hr class="dropdown-divider"></li>-->
+<!--            <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--          </ul>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--      <div class="d-flex">-->
+<!--        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search_name">-->
+<!--        <button class="btn btn-outline-success" onclick="search()">Search</button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</nav>-->
 
-  </div>
-</section>
+<button class="nav-item">
+  <a class="nav-link" onclick="showCreate()">Create Province</a>
+</button>
+<table class="table">
+  <thead>
+  <tr class="table-danger" >
+    <th scope="col">STT</th>
+    <th scope="col">Province</th>
+    <th scope="col">Country</th>
+    <th scope="col" colspan='2'>Action</th>
+  </tr>
+  </thead>
+  <form >
+    <tbody id="listProvince" enctype="multipart/form-data" >
 
-<!-- The Modal Create And Update -->
-<div class="modal" id="myModal">
-  <div class="modal-dialog modal-dialog-centered">
+    </tbody>
+  </form>
+</table>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
     <div class="modal-content">
-
-      <!-- Modal Header -->
       <div class="modal-header">
-        <h4 id="titleFrom" class="modal-title"></h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title" id="exampleModalLabel">Create Province</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+        <form id="addForm">
+          <label>Name</label>
+          <input type="text" id="name" class="form-control">
+          <label>Country</label><br>
+          <label><select id="country"></select></label><br>
+          <label>Price</label>
+          <input type="text" id="area" class="form-control">
+          <label>Population</label>
+          <input type="text" id="population" class="form-control">
+          <label>GDP</label>
+          <input type="text" id="gdp" class="form-control">
+          <label>Introduce</label>
+          <input type="text" id="introduce" class="form-control">
 
-      <!-- Modal body -->
-      <form method="post" id="data" ><table class="modal-body">
-        <tr>
-          <td><input id="name" type="text" > Name
-          </td>
-
-        </tr>
-        <tr>
-          <td>
-            <input id="popular" type="text" >Popular
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <input id="area" type="text" >Area
-          </td>
-        </tr>
-        <tr>
-        <tr>
-          <td>
-            <input id="gdp" type="text" >GDP
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <input id="description">
-            Description
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <select id="country"></select>
-            Country
-          </td>
-        </tr>
-        <tr>
-          <td id="messageCreate">
-
-          </td>
-        </tr>
-        <tr>
-          <td>  <button id="button" type="button" class="btn btn-danger">Create</button></td>
-        </tr>
-      </table></form>
-
-      <!-- Modal footer -->
-      <!--            <div class="modal-footer">-->
-
-      <!--            </div>-->
-
-    </div>
-  </div>
-</div>
-<!-- End Modal Create And Update -->
-<div class="modal" id="deleteModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4  class="modal-title">Do you want delete Province ?</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </form>
       </div>
-      <!-- Modal body -->
-      <table class="modal-body">
-        <tr>
-          <td id="messageDelete"> </td>
-        </tr>
-      </table>
-      <!-- Modal footer -->
       <div class="modal-footer">
-        <button onclick="deleteCustomer()" type="button" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="createProvince()">Create</button>
       </div>
-
     </div>
   </div>
 </div>
+
+
+
+<!--Cập Nhật-->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Update Province</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm">
+          <label>Name</label>
+          <input type="text" id="name1" class="form-control">
+          <label>Country</label><br>
+          <label><select id="country1"></select></label><br>
+          <label>Price</label>
+          <input type="text" id="area1" class="form-control">
+          <label>Population</label>
+          <input type="text" id="population1" class="form-control">
+          <label>GDP</label>
+          <input type="text" id="gdp1" class="form-control">
+          <label>Introduce</label>
+          <input type="text" id="introduce1" class="form-control">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="updateProvince()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Chi tiết-->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Detail Province</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm1">
+          <label>Name</label>
+          <input type="text" id="name2" class="form-control" readonly>
+          <label>Country</label><br>
+          <label><input id="country2" readonly></label><br>
+          <label>Price</label>
+          <input type="text" id="area2" class="form-control" readonly>
+          <label>Population</label>
+          <input type="text" id="population2" class="form-control" readonly>
+          <label>GDP</label>
+          <input type="text" id="gdp2" class="form-control" readonly>
+          <label>Introduce</label>
+          <input type="text" id="introduce2" class="form-control" readonly>
+        </form>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary" onclick="updateProvince()">Update</button>
+        <button type="button" class="btn btn-primary" onclick="detailProvince()">Detail</button>
+        <button type="button" class="btn btn-secondary" onclick='deleteComfirm()' >Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Chi tiết-->
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Detail Province</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm3">
+          <label>Name</label>
+          <input type="text" id="name3" class="form-control" readonly>
+          <label>Country</label><br>
+          <label><input id="country3" readonly></label><br>
+          <label>Price</label>
+          <input type="text" id="area3" class="form-control" readonly>
+          <label>Population</label>
+          <input type="text" id="population3" class="form-control" readonly>
+          <label>GDP</label>
+          <input type="text" id="gdp3" class="form-control" readonly>
+          <label>Introduce</label>
+          <input type="text" id="introduce3" class="form-control" readonly>
+        </form>
+      </div>
+      <div class="modal-footer">
+
+
+
 
 </body>
 <script src="index.js"></script>

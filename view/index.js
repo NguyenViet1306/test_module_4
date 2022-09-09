@@ -1,187 +1,101 @@
-getAllProvince();
-let idProvince;
-getAllCountry();
 
-function getAllProvince() {
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/provinces",
-        success: function (data) {
-            displayTable(data)
-        }
-    })
+function showCreate(){
+    $('#exampleModal').modal('show');
+    listCountry()
 }
 
-function getAllCountry() {
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/provinces/country",
-        success: function (data) {
-            let result = ""
-            for (let i = 0; i < data.length; i++) {
-                result += "<option value='" + data[i].id + "'>" + data[i].name
-                    + "</option>"
-            }
-            document.getElementById("departments").innerHTML = result;
-        }
-    })
-}
 
-function displayTable(data) {
-    let result = ""
-    result += "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\">"
-    for (let i = 0; i < data.length; i++) {
-        result += "<tr>"
-        result += "<td>" + (i + 1) + "</td>"
-        result += "<td>" + data[i].name + "</td>"
-        result += "<td>" + data[i].popular + "</td>"
-        result += "<td>" + data[i].areas + "</td>"
-        result += "<td>" + data[i].gdp + "</td>"
-        result += "<td>" + data[i].description + "</td>"
-        result += "<td>" + data[i].country.name + "</td>"
-        result += "<td><button type=\"button\" class=\"btn btn-danger\" onclick='updateForm(" + data[i].id + ")'>Update</button>"
-        result += "<button type=\"button\" class=\"btn btn-danger\" onclick='deleteProvince(" + data[i].id + ")'>Detail</button>"
-        result += "<button type=\"button\" class=\"btn btn-danger\" onclick='deleteProvince(" + data[i].id + ")'>Delete</button>"
-        result += "</tr>"
+
+function createProvince(){
+    let name = $('#name').val();
+    let area = $('#area').val();
+    let population = $('#population').val();
+    let gdp = $('#gdp').val();
+    let country = $('#country').val();
+    let introduce = $('#introduce').val();
+    let province ={
+        name : name,
+        area : area,
+        popular : population,
+        description : introduce,
+        gdp : gdp,
+        country : {
+            id : country
+        },
+
     }
-    result += "</table>"
-    document.getElementById("list-customers").innerHTML = result;
-}
-
-function detailProvince() {
-
-}
-
-function displayCreateForm() {
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/provinces/country",
-        success: function (data) {
-            let result = ""
-            for (let i = 0; i < data.length; i++) {
-                result += "<option value='" + data[i].id + "'>" + data[i].name
-                result += "</option>"
-            }
-            document.getElementById("departments").innerHTML = result;
-        }
-    })
-
-    formCreate()
-    document.getElementById("titleFrom").innerHTML = "Create new customer"
-    document.getElementById("button").innerHTML = "Create"
-    document.getElementById("button").setAttribute("onclick", "createCustomer()")
-    // onclick="createHuman()"
-    $('#myModal').modal('show');
-}
-
-function formCreate() {
-    document.getElementById("name").value = ""
-    document.getElementById("popular").value = ""
-    document.getElementById("area").value = ""
-    document.getElementById("gdp").value = ""
-    document.getElementById("description").value = ""
-    document.getElementById("country").value = ""
-}
-
-
-function createProvince() {
-    getAllCountry()
-    let name = $('#name').val()
-    let popular = $('#popular').val()
-    let area = $('#area').val()
-    let gdp = $('#gdp').val()
-    let description = $('#description').val()
-    let country = $('#country').val()
-    let province = {
-        name: name,
-        popular: popular,
-        area: area,
-        gdp: gdp,
-        description: description,
-        country: {
-            id: country
-        }
-    };
-
-
     $.ajax({
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         type: "POST",
-        data: JSON.stringify(province),
-        //tên API
         url: "http://localhost:8080/api/provinces",
-        //xử lý khi thành công
-        success: function () {
-            formCreate()
-            document.getElementById("messageCreate").innerHTML = "Create successfully!";
+        data: JSON.stringify(province),
+        success:function (){
             getAllProvince();
-        }
-    });
-    //chặn sự kiện mặc định của thẻ
-    event.preventDefault();
-}
-
-function setFormUpdate(data) {
-    document.getElementById("name").value = data.name
-    document.getElementById("popular").value = data.popular
-    document.getElementById("area").value = data.area
-    document.getElementById("gdp").value = data.gdp
-    document.getElementById("description").value = data.description
-    document.getElementById("country").value = data.country
-
-}
-
-function updateForm(id) {
-    // $.ajax({
-    //     type: "GET",
-    //     url: "http://localhost:8080/api/provinces/country",
-    //     success: function (data) {
-    //         let result = ""
-    //         for (let i = 0; i < data.length; i++) {
-    //             result += "<option value='" + data[i].id + "'>" + data[i].name
-    //             result += "</option>"
-    //         }
-    //         document.getElementById("departments").innerHTML = result;
-    //     }
-    // })
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/provinces/" + id,
-        success: function (data) {
-            idCustomer = id
-            setFormUpdate(data)
-            document.getElementById("messageCreate").innerHTML = ""
+            alert("Tạo thành công!");
+            $('#exampleModal').modal('hide');
+            document.getElementById("addForm").reset()
         }
     })
+    event.preventDefault()
+}
+let table = document.getElementById("listProvince");
+getAllProvince();
 
-    document.getElementById("button").innerHTML = "Update"
-    document.getElementById("button").setAttribute("onclick", "updateCustomer()")
-    $('#myModal').modal("show")
+function getAllProvince(){
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/provinces",
+        success :function (data) {
+            displayTable(data);
+        }
+    })
+}
+function displayTable(data){
+    let result = ""
+    for (let i = 0; i < data.length; i++) {
+        result +="<tr >"
+        result+="<td >"+ (i + 1) +"</td>"
+        result+="<td><a onclick='showEditForm2("+data[i].id+")'>"+ data[i].name +"</a></td>"
+        result+="<td>"+ data[i].country.name +"</td>"
+        result+="<td><button onclick='showEditForm("+data[i].id+")'>Update</button></td>"
+        result+="<td><button onclick='detailProvince("+data[i].id+")'>Detail</button></td>"
+        result+="<td><button onclick='deleteComfirm("+data[i].id+")'>Delete</button></td>"
+        result +="</tr>"
+    }
+    table.innerHTML = result;
+
 }
 
-function updateProvince() {
 
-    let name = $('#name').val()
-    let popular = $('#popular').val()
-    let area = $('#area').val()
-    let gdp = $('#gdp').val()
-    let description = $('#description').val()
-    let country = $('#country').val()
-    let province = {
-        id: idProvince,
-        name: name,
-        popular: popular,
-        area: area,
-        gdp: gdp,
-        description: description,
-        country: {
-            id: country
-        }
-    };
 
+function showCreate(){
+    $('#exampleModal').modal('show');
+    listCountry()
+}
+
+
+
+function createProvince(){
+    let name = $('#name').val();
+    let area = $('#area').val();
+    let population = $('#population').val();
+    let gdp = $('#gdp').val();
+    let country = $('#country').val();
+    let description = $('#introduce').val();
+    let province ={
+        name : name,
+        area : area,
+        popular : population,
+        introduce : introduce,
+        gdp : gdp,
+        country : {
+            id : country
+        },
+
+    }
     $.ajax({
         headers: {
             'Accept': 'application/json',
@@ -190,30 +104,146 @@ function updateProvince() {
         type: "POST",
         url: "http://localhost:8080/api/provinces",
         data: JSON.stringify(province),
-        success: function (data) {
-            setFormUpdate(data)
-            document.getElementById("messageCreate").innerHTML = "Update successfully!"
-            getAllProvince()
+        success:function (){
+            getAllProvince();
+            alert("Tạo thành công!");
+            $('#exampleModal').modal('hide');
+            document.getElementById("addForm").reset()
         }
     })
     event.preventDefault()
 }
 
 
-function deleteForm(id) {
-    idProvince = id
-    document.getElementById("messageDelete").innerHTML = ""
-    $('deleteModal').modal("show")
+function listCountry(){
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8080/api/provinces/country",
+        success: function (listCountry){
+            result = ""
+            for (let i = 0; i < listCountry.length; i++) {
+                result += "<option value="+listCountry[i].id+">"+ listCountry[i].name +"</option>"
+            }
+            document.getElementById("country").innerHTML = result;
+            document.getElementById("country1").innerHTML = result;
+            // document.getElementById("country1").innerHTML = result;
+        }
+    })
 }
 
-function deleteProvince(id) {
+
+
+function deleteComfirm(id){
+    let result = confirm("Bạn có muốn xóa không?")
+    if (result){
+        deleteProvince(id);
+    }
+}
+function deleteProvince(id){
     $.ajax({
         type: "DELETE",
-        url: "http://localhost:8080/api/provinces/" + id,
-        success: function () {
-            document.getElementById("messageDelete").innerHTML = "Delete successfully!"
+        url: "http://localhost:8080/api/provinces/"+ id,
+        success: function (){
             getAllProvince()
+            alert("Xóa thành công")
+        }
+    })
+}
+
+let idProvince;
+function showEditForm(id){
+
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/provinces/" + id,
+        success: function (data) {
+            localStorage = data.id
+            idProvince = data.id;
+            document.getElementById("name1").value = data.name
+            document.getElementById("country1").value = data.country.name
+            document.getElementById("area1").value = data.area
+            document.getElementById("population1").value = data.popular
+            document.getElementById("gdp1").value = data.gdp
+            document.getElementById("introduce1").value = data.description
+            listCountry()
+        }
+    })
+    $('#exampleModal1').modal('show');
+}
+function showEditForm2(id){
+
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/provinces/" + id,
+        success: function (data) {
+            idProvince = data.id;
+            document.getElementById("name2").value = data.name
+            document.getElementById("country2").value = data.country.name
+            document.getElementById("area2").value = data.area
+            document.getElementById("population2").value = data.popular
+            document.getElementById("gdp2").value = data.gdp
+            document.getElementById("introduce2").value = data.description
+            listCountry()
+        }
+    })
+    $('#exampleModal2').modal('show');
+}
+
+
+
+function updateProvince(){
+    let name = $('#name1').val();
+    let area = $('#area1').val();
+    let population = $('#population1').val();
+    let gdp = $('#gdp1').val();
+    let country = $('#country1').val();
+    let introduce = $('#introduce1').val();
+    let province ={
+        id: idProvince,
+        name : name,
+        area : area,
+        popular : population,
+        description : introduce,
+        gdp : gdp,
+        country : {
+            id : country
+        },
+
+    }
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        type: "PUT",
+        url: "http://localhost:8080/api/provinces/" + idProvince,
+        data: JSON.stringify(province),
+        success:function (){
+            getAllProvince();
+            alert("Sửa thành công!");
+            $('#exampleModal1').modal('hide');
+            document.getElementById("editForm").reset()
         }
     })
     event.preventDefault()
+}
+
+function detailProvince(id){
+
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/provinces/" + id,
+        success: function (data) {
+
+
+            document.getElementById("name3").value = data.name
+            document.getElementById("country3").value = data.country.name
+            document.getElementById("area3").value = data.area
+            document.getElementById("population3").value = data.popular
+            document.getElementById("gdp3").value = data.gdp
+            document.getElementById("introduce3").value = data.description
+
+        }
+    })
+    $('#exampleModal3').modal('show');
 }
